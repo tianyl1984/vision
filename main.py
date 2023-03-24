@@ -5,6 +5,8 @@ import datetime
 import time
 import pytesseract
 from PIL import Image
+from db import item_data
+from db import player_item_data
 
 NUMBER_IMAGE_WIDTH = 120
 NUMBER_IMAGE_HEIGHT = 30
@@ -77,10 +79,10 @@ def crop(img, loc):
 def recognize():
     # 提供两张图片，一个大图一个小图，通过识别算法，查找小图在大图的坐标
     big_image = "C:\\Users\\tianyl\\Downloads\\vision\\20230318213403.png"
-    # small_image = "C:\\Users\\tianyl\\Downloads\\vision\\target_2.png"
-    small_images = ["0001", "0002", "0003", "0004"]
-    for img in small_images:
-        small_image = f"images/{img}.png"
+    items = item_data.get_items_by_type(1)
+    # small_images = ["0001", "0002", "0003", "0004"]
+    for item in items:
+        small_image = f"images/item/{item.code}.png"
         location = pyautogui.locate(small_image, big_image, confidence=0.8)
         if location is None:
             print("查找失败")
@@ -91,7 +93,10 @@ def recognize():
         # number_img.show()
         number = pytesseract.image_to_string(
             number_img, lang='eng', config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
-        print(f"{img}:{number}")
+        print(f"{item.name}:{number}")
+        if number == "" or number == None :
+            return
+        player_item_data.update_quantity(item.id, int(number))
     print("操作成功")
 
 

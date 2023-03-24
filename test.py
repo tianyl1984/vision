@@ -1,11 +1,11 @@
-image="C:\\Users\\tianyl\\Downloads\\vision\\source_1.png"
-from PIL import Image
+from db import db_util
+from db import item_data
+from db import player_item_data
 
-im = Image.open(image)
-width = 120
-height = 30
-x = 760
-y = 1300
-box = (x, y, x + width, y + height)
-region = im.crop(box)
-region.show()
+# items = item_data.get_items_by_type(1)
+# for temp in items:
+#     print(temp)
+
+# print(items[0].name)
+
+player_item_data.update_quantity(1, 10)
