@@ -7,6 +7,7 @@ import pytesseract
 from PIL import Image
 from db import item_data
 from db import player_item_data
+import util
 
 NUMBER_IMAGE_WIDTH = 120
 NUMBER_IMAGE_HEIGHT = 30
@@ -42,7 +43,7 @@ def screenshot():
     if not os.path.exists(download_folder):
         os.makedirs(download_folder)
     # 指定坐标位置
-    location = get_game_location()
+    location = util.get_game_location()
     if location is None:
         return
     x = location[0]
@@ -56,16 +57,6 @@ def screenshot():
         time.sleep(2)
 
     print("操作成功")
-
-
-def get_game_location():
-    icon = "images/game_icon.png"
-    box = pyautogui.locateOnScreen(icon, confidence=0.8)
-    if box is None:
-        pyautogui.alert(title="提示", text="未找到游戏")
-        return None
-    return (box.left, box.top)
-
 
 def crop(img, loc):
     im = Image.open(img)

@@ -5,6 +5,7 @@ import datetime
 import time
 import pytesseract
 from PIL import Image
+import util
 
 ITEM_IMAGE_WIDTH = 110
 ITEM_IMAGE_HEIGHT = 170
@@ -12,6 +13,8 @@ INCREASE_X = 195
 INCREASE_Y = 235
 START_X = 158
 START_Y = 195
+GAME_WIDTH = 2560
+GAME_HEIGHT = 1600
 
 
 def start():
@@ -33,8 +36,9 @@ def start():
 
 
 def cute():
+    screenshot()
     download_folder = os.path.join(os.path.expanduser("~"), "Downloads/vision")
-    im = Image.open("C:\\Users\\tianyl\\Downloads\\vision\\20230318213403.png")
+    im = Image.open(download_folder + "/temp.png")
     x = 760
     y = 1300
     for i in range(8):
@@ -46,5 +50,19 @@ def cute():
             region.save(os.path.join(download_folder, f"{i}_{j}.png"))
     pyautogui.alert(title="提示", text="完成")
 
+def screenshot():
+    download_folder = os.path.join(os.path.expanduser("~"), "Downloads/vision")
+    if not os.path.exists(download_folder):
+        os.makedirs(download_folder)
+    # 指定坐标位置
+    location = util.get_game_location()
+    if location is None:
+        return
+    x = location[0]
+    y = location[1]
+    screenshot_pic = pyautogui.screenshot(
+        region=(x, y, GAME_WIDTH, GAME_HEIGHT))
+    screenshot_pic.save(os.path.join(download_folder, "temp.png"))
+    print("截图生成成功")
 
 start()

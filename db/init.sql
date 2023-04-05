@@ -1,3 +1,4 @@
+-- 物品
 DROP TABLE IF EXISTS item;
 CREATE TABLE `item` (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -7,9 +8,7 @@ CREATE TABLE `item` (
 );
 CREATE UNIQUE INDEX item_code_uindex on item (code);
 
-INSERT INTO item (code, name, type) VALUES ('00001', '中文test', 1);
-INSERT INTO item (code, name, type) VALUES ('00002', 'abc', 1);
-
+-- 物品转换关系
 DROP TABLE IF EXISTS item_cast;
 CREATE TABLE `item_cast` (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,6 +17,7 @@ CREATE TABLE `item_cast` (
     `rate` INTEGER NOT NULL 
 );
 
+-- 已有物品数量
 DROP TABLE IF EXISTS player_item;
 CREATE TABLE `player_item` (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,12 +27,22 @@ CREATE TABLE `player_item` (
 );
 CREATE UNIQUE INDEX player_item_item_id_uindex on player_item (item_id);
 
-INSERT INTO player_item (id, item_id, quantity, update_time) VALUES (1, 1, 20, 1679451810);
-
+-- 角色
 DROP TABLE IF EXISTS player_role;
-CREATE TABLE `player_item` (
+CREATE TABLE `player_role` (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `code` VARCHAR(10) NOT NULL,
+    `name` VARCHAR(50) NOT NULL
+);
+CREATE UNIQUE INDEX player_role_code_uindex on player_role (code);
+
+insert into player_role(code,name) values ('C001','纳西妲');
+
+-- 角色升级需要的物品
+DROP TABLE IF EXISTS role_item;
+CREATE TABLE `role_item` (
+    `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `role_code` VARCHAR(10) NOT NULL,
     `item_id` INTEGER NOT NULL,
-    `quantity` INTEGER NOT NULL,
-    `update_time` INTEGER NOT NULL
+    `quantity` INTEGER NOT NULL
 );
