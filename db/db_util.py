@@ -15,6 +15,7 @@ def _with_conn(cb, *args):
 
 def _fetchall(conn, cur, *args):
     sql = args[0]
+    # print(sql, (args[1]))
     cur.execute(sql, (args[1]))
     return cur.fetchall()
 
@@ -41,3 +42,6 @@ def _execute(conn, cur, *args):
 
 def execute(sql, *args):
     _with_conn(_execute, sql, args)
+
+def in_query(params):
+    return "(" + ",".join(["?" for i in range(len(params))]) + ")"
